@@ -15,11 +15,11 @@ module Glosbe
     format: "json"
   }
 
-  def self.definition(word)
+  def self.definitions(word)
     self.parse_definition(self.request(TRANSLATE_URL, phrase: word))
   end
 
-  def self.phrase(word)
+  def self.phrases(word)
     self.parse_phrase(self.request(PHRASE_URL, phrase: word))
   end
 
@@ -32,11 +32,12 @@ module Glosbe
   def self.parse_definition(response)
     JSON.parse(response.body)["tuc"].map do |f|
       f["phrase"] && f["phrase"]["text"]
-    end.compact.first(3)
+    end.compact
   end
 
   def self.parse_phrase(response)
-    hash = JSON.parse(response.body)["examples"].min_by { |f| f["first"].length }
-    [ hash["first"], hash["second"] ]
+    JSON.parse(response.body)["examples"].sort_by { |f| f["first"].length }.map do |hash|
+      [ hash["first"], hash["second"] ]
+    end
   end
 end
