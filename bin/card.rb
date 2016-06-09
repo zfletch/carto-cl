@@ -36,9 +36,10 @@ ARGF.each_line do |line|
   word = line.chomp
 
   parsed_word = word.sub(/\Ala |le |l'|un |une |les |des |de la |du |de l'/, '')
+  parsed_word = parsed_word.sub(/ -\w+\Z/, '')
 
   begin
-    warn word
+    warn "#{word} (#{parsed_word})"
     definitions = get_definitions(Glosbe.definitions(parsed_word)).join(", ")
     phrase = get_phrase(Glosbe.phrases(parsed_word))
 
