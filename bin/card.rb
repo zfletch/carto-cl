@@ -19,13 +19,17 @@ def get_definitions(definitions)
 end
 
 def get_phrase(phrases)
-  warn "Phrase: Y[es]/n[o]"
+  warn "Phrase: Y[es]/n[o]/c[ustom]"
+  if !phrases || phrases == []
+    phrases = [""]
+  end
   loop do
     phrases.each do |phrase|
       warn phrase[0]
       warn phrase[1]
       case gets.chomp
       when /\An/i then next
+      when /\Ac/i then return [gets.chomp, gets.chomp]
       else return phrase
       end
     end
